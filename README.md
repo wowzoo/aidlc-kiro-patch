@@ -40,8 +40,7 @@
 
 ## ② patch 목록 — 2.7.1 기준 스냅샷
 
-⚠️ **이것은 2.7.1 한 세대의 스냅샷이다.** 살아 있는 정본은 워크스페이스의
-`.claude/skills/aidlc-kiro-patch/register.md` 이고, 세대마다 전 항목을 다시 잰다. 좌표(줄 번호)는 순정 또는
+⚠️ **이것은 2.7.1 한 세대의 스냅샷이다.** 세대가 바뀌면 전 항목을 다시 잰다. 좌표(줄 번호)는 순정 또는
 층1 기준이므로 이 트리에서 그대로 찾으면 어긋난다.
 
 ### 엔진 결함 정정 — `.ts` 코드 (8건)
@@ -99,8 +98,8 @@
 | Kiro IDE **0.x** | ❌ | agent 가 JSON-only 세대라 이 트리의 `.md` 자산이 돌지 않는다 |
 | Kiro CLI **2.x classic / v2** | ❌ | 통합 형태가 그 엔진 세대에 서지 않는다 |
 
-legacy 두 surface 는 **순정을 그대로 핀한 별도 트리**로 워크스페이스에 남겨 두었다
-(`v2-2.7.1-kiro-ide-legacy` · `v2-2.7.1-kiro-cli-legacy`) — 우리 델타를 싣지 않은 순정 사본이다.
+legacy 두 surface 를 써야 한다면 이 트리가 아니라 **순정 배포본을 그대로** 쓴다 — 통합축과 patch 는 그
+세대를 대상으로 잰 것이 아니다.
 
 ## 쓰는 법
 
@@ -131,27 +130,12 @@ bun .kiro/tools/aidlc-utility.ts doctor
 그날 움직이니, 다음 세대에는 순정을 다시 재서 대조한다.
 
 ⚠️ **`doctor` 가 묻지 않는 것이 있다** — 우리 델타가 트리에 실제로 들어 있는지, hook 이 실제로 발화하는지,
-통합축이 일관한지. 그래서 전수 검증은 워크스페이스의 두 스킬 배터리(`verify.py`)가 맡는다 — 2026-09-04
-기준 두 층 모두 **PASS**.
-
-## 다시 세우려면
-
-이 트리는 손으로 만든 것이 아니라 기계로 도출된 것이다. 워크스페이스(`~/Development/aidlc-v2-patch`)에서
-두 스킬을 순서대로 쓴다 — `aidlc-kiro-unify`(층1) → `aidlc-kiro-patch`(층2). 순서가 규약이다.
-
-```bash
-R=~/Development/ai-dlc/_single-source-of-truth/aidlc-workflows-v2
-git -C "$R" archive a277af21 dist/kiro-ide | tar -x -C /tmp/stock-2.7.1-kiro-ide
-# 층1 → /tmp 에 PR 산출물, 층2 → 이 트리
-```
+통합축이 일관한지. 이 트리는 배포 전에 그 항목까지 전수 검증했다 — 2026-09-04 기준 두 층 모두 **PASS**.
 
 ## 주의
 
 - **plugin 은 별도 작업이다.** `visual-mockups`(시각 mockup) 와 `code-map`(외부 코드맵) 은 이 트리에 없다.
-  얹으려면 워크스페이스의 `plugins/README.md` 절차를 따른다. 얹으면 MCP 서버가 5 → 7 로 늘고
-  `.aidlc-plugin/` 표시가 생기므로, 적용 여부는 그 둘로 판별한다.
-- **이 트리를 고쳐 쓰지 말 것.** 고칠 것이 생기면 워크스페이스의 트리를 고치고 `respec.py` 를 돌린 뒤 다시
-  복사한다. 사본을 직접 고치면 두 벌이 갈리고, 스펙은 그 갈림을 잡아 주지 않는다.
+  얹으면 MCP 서버가 5 → 7 로 늘고 `.aidlc-plugin/` 표시가 생기므로, 적용 여부는 그 둘로 판별한다.
 - **배포된 hook body 가 전부 등록돼 있는 것은 아니다.** `ls .kiro/hooks/*.json` 이 live view 이고, 왜 일부가
   미등록인지는 이 트리의 `AGENTS.md` 가 설명한다(`aidlc-session-end.ts`·`aidlc-fold-usage.ts` 는 Claude Code
   전용 producer 다). 이름만 보고 누락이라 판정하지 않는다.
